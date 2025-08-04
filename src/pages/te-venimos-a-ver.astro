@@ -1,0 +1,352 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Maxwidth from "../layouts/Maxwidth.astro";
+import Play from "../components/icons/Play.astro";
+import Pause from "../components/icons/Pause.astro";
+import Regresar from "../components/icons/Regresar.astro";
+---
+
+<Layout 
+  titulo="Cancionero - Te venimos a ver"
+  ocultarNav={true}
+  >
+  <main class="main">
+    <Maxwidth>
+      <div class="main__contenedor">
+        <div class="main__cancion">
+          <div class="main__atras">
+            <a href="/" class="main__icono">
+              <Regresar />
+            </a>
+          </div>
+          <div class="main__informacion">
+            <h5 class="main__nombre">Te venimos a ver</h5>
+            <h5 class="main__autor">La banda del rojo</h5>
+          </div>
+        </div>
+        <div class="main__contenedor-letra">
+          <div class="main__letra" id="letra-contenedor"></div>
+        </div>
+        <div class="main__reproduccion">
+          <div class="main__progreso">
+            <div class="main__barra" id="barra-progreso"></div>
+          </div>
+          <div class="main__botones">
+            <Play class="main__reproducir" id="reproducir"/>
+            <Pause class="main__pausa" id="pausar"/>
+          </div>
+        </div>
+      </div>
+    </Maxwidth>
+  </main>
+</Layout>
+
+<style>
+  .main {
+    width: 100%;
+    height: 100dvh;
+    min-height: 100dvh;
+    background-color: #d30d2b;
+  }
+
+  .max {
+    position: relative;
+  }
+
+  .main__contenedor {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .main__cancion {
+    width: 100%;
+    background-color: #d30d2b;
+    position: relative;
+    padding: 25px 0;
+    z-index: 888;
+  }
+
+  .main__atras {
+    position: absolute;
+    left: 0;
+  }
+
+  .main__icono {
+    color: #fff; 
+  }
+
+  .main__informacion {
+    text-align: center;
+  }
+
+  .main__nombre {
+    font-family: var(--fuente-titulos);
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+  }
+
+  .main__autor {
+    font-size: 1rem;
+    font-family: var(--fuente-textos-light);
+  }
+
+  .main__contenedor-letra {
+    width: 100%;
+    height: 100%;
+    padding: 0 1rem;
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    z-index: 444;
+  }
+
+  .main__letra {
+    padding: 20% 0;
+  }
+
+  .main__reproduccion {
+    background-color: #d30d2b;
+    padding: 15px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+    z-index: 888;
+  }
+
+  .main__progreso {
+    width: 100%;
+    max-width: 400px;
+    height: 5px;
+    background-color: #ffffff50;
+    border-radius: 15px;
+
+  }
+
+  .main__barra {
+    width: 0%;
+    height: 100%;
+    background-color: #fff;
+    border-radius: 15px;
+  }
+
+  .main__botones {
+    color: #000;
+    background-color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+  }
+
+
+  @media screen and (max-width: 760px) {
+    .main__letra {
+      padding: 40% 0;
+    }
+  }
+
+
+  @media screen and (max-width: 480px) {
+    .main__nombre {
+      font-size: 1rem;
+    }
+
+    .main__autor {
+      font-size: .9rem;
+    }
+    
+    .main__letra {
+      padding: 50% 0;
+    }
+  }
+  
+</style>
+
+<script is:inline>
+// Cargar Howler.js desde CDN
+if (typeof Howl === 'undefined') {
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js';
+  script.onload = initKaraoke;
+  document.head.appendChild(script);
+} else {
+  initKaraoke();
+}
+
+function initKaraoke() {
+  // Elementos del DOM
+  const playBtn = document.getElementById('reproducir');
+  const pauseBtn = document.getElementById('pausar');
+  const lyricsContainer = document.getElementById('letra-contenedor');
+  const progressBar = document.getElementById('barra-progreso');
+
+  // Letras sincronizadas
+  const lyrics = [
+    { time: 0.00, text: "Vamos los rojos no falles a tu hinchada" },
+    { time: 3.00, text: "La que te sigue en las buenas y en las malas" },
+    { time: 6.10, text: "Vamos los rojos por ti dejo la vida" },
+    { time: 9.50, text: "No soy amargo como son las gallinas" },
+    { time: 12.90, text: "Yo soy así" },
+    { time: 14.00, text: "Al rojo yo lo quiero" },
+    { time: 16.00, text: "Y el -rival-" },
+    { time: 19.00, text: "Nos chupan bien los huevos" },
+    { time: 21.50, text: "Hoy te venimos a ver" },
+    { time: 24.10, text: "Y dale rojo tu eres mi vida" },
+    { time: 28.00, text: "Siempre te voy a alentar" },
+    { time: 30.70, text: "Aunque no quiera la policia" },
+    { time: 33.20, text: "Putos" },
+    { time: 34.60, text: "Vayas a donde vayas" },
+    { time: 37.00, text: "A todas partes te seguiremos" },
+    { time: 41.00, text: "Dale campeon quiero ganar" },
+    { time: 43.50, text: "Que..." },
+    { time: 45.40, text: "La vuelta vamo' a dar" },
+    { time: 47.70, text: "Vamos los rojos no falles a tu hinchada" },
+    { time: 50.90, text: "La que te sigue en las buenas y en las malas" },
+    { time: 54.00, text: "Vamos los rojos por ti dejo la vida" },
+    { time: 57.50, text: "No soy amargo como son las gallinas" },
+    { time: 60.80, text: "Yo soy así" },
+    { time: 62.00, text: "Al rojo yo lo quiero" },
+    { time: 64.00, text: "Y el -rival-" },
+    { time: 66.50, text: "Nos chupan bien los huevos" },
+    { time: 69.00, text: "Hoy te venimos a ver" },
+    { time: 71.60, text: "Y dale rojo tu eres mi vida" },
+    { time: 75.50, text: "Siempre te voy a alentar" },
+    { time: 78.00, text: "Aunque no quiera la policia" },
+    { time: 80.70, text: "Putos" },
+    { time: 82.00, text: "Vayas a donde vayas" },
+    { time: 84.70, text: "A todas partes te seguiremos" },
+    { time: 88.10, text: "Dale campeon quiero ganar" },
+    { time: 90.60, text: "Que..." },
+    { time: 92.90, text: "La vuelta vamo' a dar" },
+
+  ];
+
+  // Variables
+  let sound = null;
+  let lyricsInterval = null;
+  let progressInterval = null;
+
+  // Inicializar el reproductor
+  function initPlayer() {
+    sound = new Howl({
+      src: ['/media/canciones/hoy-te-venimos-a-ver.mp3'],
+      volume: 0.8,
+      html5: true,
+      onplay: function() {
+        startLyricsSync();
+        updateProgress();
+        if (playBtn) playBtn.style.display = 'none';
+        if (pauseBtn) pauseBtn.style.display = 'block';
+      },
+      onpause: function() {
+        clearIntervals();
+        if (playBtn) playBtn.style.display = 'block';
+        if (pauseBtn) pauseBtn.style.display = 'none';
+      },
+      onend: function() {
+        clearIntervals();
+        resetPlayer();
+        if (playBtn) playBtn.style.display = 'block';
+        if (pauseBtn) pauseBtn.style.display = 'none';
+      }
+    });
+  }
+
+  // Renderizar letras
+  function renderLyrics() {
+    if (!lyricsContainer) return;
+    
+    lyricsContainer.innerHTML = lyrics.map(l => 
+      `<div class="main__linea" data-time="${l.time}">${l.text}</div>`
+    ).join('');
+  }
+
+  // Sincronizar letras
+  function startLyricsSync() {
+    let currentActiveIndex = -1;
+    
+    lyricsInterval = setInterval(() => {
+      if (!sound || !sound.playing()) return;
+      
+      const currentTime = sound.seek();
+      const lines = document.querySelectorAll('.main__linea');
+      
+      let newActiveIndex = -1;
+      for (let i = 0; i < lyrics.length; i++) {
+        if (currentTime >= lyrics[i].time) {
+          newActiveIndex = i;
+        } else {
+          break;
+        }
+      }
+      
+      if (newActiveIndex !== currentActiveIndex) {
+        lines.forEach(line => line.classList.remove('activo'));
+        
+        if (newActiveIndex >= 0) {
+          lines[newActiveIndex].classList.add('activo');
+          lines[newActiveIndex].scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+          });
+        }
+        
+        currentActiveIndex = newActiveIndex;
+      }
+    }, 100);
+  }
+
+  // Actualizar barra de progreso
+  function updateProgress() {
+    progressInterval = setInterval(() => {
+      if (!sound || !progressBar) return;
+      
+      const progress = (sound.seek() / sound.duration()) * 100;
+      progressBar.style.width = progress + '%';
+    }, 200);
+  }
+
+  // Limpiar intervalos
+  function clearIntervals() {
+    if (lyricsInterval) clearInterval(lyricsInterval);
+    if (progressInterval) clearInterval(progressInterval);
+  }
+
+  // Resetear
+  function resetPlayer() {
+    if (progressBar) progressBar.style.width = '0%';
+    document.querySelectorAll('.main__linea').forEach(line => {
+      line.classList.remove('activo');
+    });
+  }
+
+  // Event listeners
+  if (playBtn && pauseBtn) {
+    // Configurar visibilidad inicial de botones
+    pauseBtn.style.display = 'none';
+    
+    playBtn.addEventListener('click', () => {
+      if (!sound) {
+        initPlayer();
+        renderLyrics();
+      }
+      if (sound) sound.play();
+    });
+    
+    pauseBtn.addEventListener('click', () => {
+      if (sound) sound.pause();
+    });
+  }
+
+  // Renderizar letras al cargar
+  renderLyrics();
+}
+</script>
+
+

@@ -1,0 +1,57 @@
+---
+import Maxwidth from "../layouts/Maxwidth.astro"
+---
+
+<nav class="nav">
+  <Maxwidth>
+    <div class="nav__logo">
+      <img src="/media/logo.svg" alt="grimorio escarlata" class="nav__img"/>
+    </div>
+    <!-- <div class="nav__menu">
+      <span class="nav__linea"></span>
+      <span class="nav__linea"></span>
+      <span class="nav__linea"></span>
+    </div>  -->
+  </Maxwidth>
+</nav>
+
+
+<style>
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    z-index: 999;
+  }
+  
+  .max {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav__img {
+    width: 80px;
+    cursor: pointer;
+  }
+
+  .nav__menu {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+  }
+
+  .nav__linea {
+    width: 60%;
+    height: 2px;
+    background-color: #fff;
+  }
+  
+</style>

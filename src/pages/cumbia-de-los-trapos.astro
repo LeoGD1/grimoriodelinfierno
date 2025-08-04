@@ -1,0 +1,370 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Maxwidth from "../layouts/Maxwidth.astro";
+import Play from "../components/icons/Play.astro";
+import Pause from "../components/icons/Pause.astro";
+import Regresar from "../components/icons/Regresar.astro";
+---
+
+<Layout 
+  titulo="Cancionero - cumbia de los trapos"
+  ocultarNav={true}
+  >
+  <main class="main">
+    <Maxwidth>
+      <div class="main__contenedor">
+        <div class="main__cancion">
+          <div class="main__atras">
+            <a href="/" class="main__icono">
+              <Regresar />
+            </a>
+          </div>
+          <div class="main__informacion">
+            <h5 class="main__nombre">Cumbia de los trapos</h5>
+            <h5 class="main__autor">Yerba Brava</h5>
+          </div>
+        </div>
+        <div class="main__contenedor-letra">
+          <div class="main__letra" id="letra-contenedor"></div>
+        </div>
+        <div class="main__reproduccion">
+          <div class="main__progreso">
+            <div class="main__barra" id="barra-progreso"></div>
+          </div>
+          <div class="main__botones">
+            <Play class="main__reproducir" id="reproducir"/>
+            <Pause class="main__pausa" id="pausar"/>
+          </div>
+        </div>
+      </div>
+    </Maxwidth>
+  </main>
+</Layout>
+
+<style>
+  .main {
+    width: 100%;
+    height: 100dvh;
+    min-height: 100dvh;
+    background-color: #d30d2b;
+  }
+
+  .max {
+    position: relative;
+  }
+
+  .main__contenedor {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .main__cancion {
+    width: 100%;
+    background-color: #d30d2b;
+    position: relative;
+    padding: 25px 0;
+    z-index: 888;
+  }
+
+  .main__atras {
+    position: absolute;
+    left: 0;
+  }
+
+  .main__icono {
+    color: #fff; 
+  }
+
+  .main__informacion {
+    text-align: center;
+  }
+
+  .main__nombre {
+    font-family: var(--fuente-titulos);
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+  }
+
+  .main__autor {
+    font-size: 1rem;
+    font-family: var(--fuente-textos-light);
+  }
+
+  .main__contenedor-letra {
+    width: 100%;
+    height: 100%;
+    padding: 0 1rem;
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    z-index: 444;
+  }
+
+  .main__letra {
+    padding: 20% 0;
+  }
+
+  .main__reproduccion {
+    background-color: #d30d2b;
+    padding: 15px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+    z-index: 888;
+  }
+
+  .main__progreso {
+    width: 100%;
+    max-width: 400px;
+    height: 5px;
+    background-color: #ffffff50;
+    border-radius: 15px;
+
+  }
+
+  .main__barra {
+    width: 0%;
+    height: 100%;
+    background-color: #fff;
+    border-radius: 15px;
+  }
+
+  .main__botones {
+    color: #000;
+    background-color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+  }
+
+
+  @media screen and (max-width: 760px) {
+    .main__letra {
+      padding: 40% 0;
+    }
+  }
+
+
+  @media screen and (max-width: 480px) {
+    .main__nombre {
+      font-size: 1rem;
+    }
+
+    .main__autor {
+      font-size: .9rem;
+    }
+    
+    .main__letra {
+      padding: 50% 0;
+    }
+  }
+  
+</style>
+
+<script is:inline>
+// Cargar Howler.js desde CDN
+if (typeof Howl === 'undefined') {
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js';
+  script.onload = initKaraoke;
+  document.head.appendChild(script);
+} else {
+  initKaraoke();
+}
+
+function initKaraoke() {
+  // Elementos del DOM
+  const playBtn = document.getElementById('reproducir');
+  const pauseBtn = document.getElementById('pausar');
+  const lyricsContainer = document.getElementById('letra-contenedor');
+  const progressBar = document.getElementById('barra-progreso');
+
+  // Letras sincronizadas
+  const lyrics = [
+    { time: 0.00, text: "..." },
+    { time: 36.20, text: "Se viene el fin de semana" },
+    { time: 38.60, text: "Todo' a la cancha vamos a ir" },
+    { time: 42.30, text: "Ya esta todo preparado" },
+    { time: 44.30, text: "El bombo y el trapo para salir" },
+    { time: 47.40, text: "Al equipo que tiene mas aguante" },
+    { time: 50.30, text: "Lo llevo dentro del corazón" },
+    { time: 53.30, text: "Saltando, cantando" },
+    { time: 54.50, text: "Prendidos a los trapos" },
+    { time: 56.20, text: "Dejamos el alma" },
+    { time: 59.60, text: "En el tablón" },
+    { time: 61.00, text: "Dale dale ro" },
+    { time: 62.60, text: "Dale ro" },
+    { time: 64.00, text: "Dale dale ro" },
+    { time: 65.20, text: "Dale ro..." },
+    { time: 71.30, text: "Borracho" },
+    { time: 73.00, text: "Yo voy cantando" },
+    { time: 76.70, text: "Con mis amigos voy festejando un triunfo más" },
+    { time: 82.80, text: "Loco" },
+    { time: 84.20, text: "Soy por el rojo" },
+    { time: 87.80, text: "Te sigo a muerte por donde vas" },
+    { time: 90.60, text: "Por que la vuelta queremos dar" },
+    { time: 94.40, text: "Queremos dar" },
+    { time: 98.00, text: "..." },
+    { time: 137.00, text: "Se viene el fin de semana" },
+    { time: 139.00, text: "Todo' a la cancha vamos a ir" },
+    { time: 142.70, text: "Ya esta todo preparado" },
+    { time: 144.80, text: "El bombo y el trapo para salir" },
+    { time: 148.00, text: "Al equipo que tiene mas aguante" },
+    { time: 150.80, text: "Lo llevo dentro del corazón" },
+    { time: 153.80, text: "Saltando, cantando" },
+    { time: 155.00, text: "Prendidos a los trapos" },
+    { time: 156.50, text: "Dejamos el alma" },
+    { time: 160.10, text: "En el tablón" },
+    { time: 161.50, text: "Dale dale ro" },
+    { time: 163.00, text: "Dale ro" },
+    { time: 164.50, text: "Dale dale ro" },
+    { time: 166.00, text: "Dale ro..." },
+    { time: 171.90, text: "Borracho" },
+    { time: 173.90, text: "Yo voy cantando" },
+    { time: 177.10, text: "Con mis amigos voy festejando un triunfo mas" },
+    { time: 183.00, text: "Loco" },
+    { time: 185.00, text: "Soy por el rojo" },
+    { time: 188.50, text: "Te sigo a muerte por donde vas" },
+    { time: 191.00, text: "Por que la vuelta queremos dar" },
+    { time: 195.60, text: "Borracho" },
+    { time: 197.60, text: "Yo voy cantando" },
+    { time: 200.50, text: "Con mis amigos voy festejando un triunfo mas" },
+    { time: 207.00, text: "Loco" },
+    { time: 208.80, text: "Soy por el rojo" },
+    { time: 212.00, text: "Te sigo a muerte por donde vas" },
+    { time: 214.80, text: "Por que la vuelta queremos dar" },
+    { time: 218.80, text: "Queremos dar" },
+    { time: 222.00, text: "..." },
+
+  ];
+
+  // Variables
+  let sound = null;
+  let lyricsInterval = null;
+  let progressInterval = null;
+
+  // Inicializar el reproductor
+  function initPlayer() {
+    sound = new Howl({
+      src: ['/media/canciones/cumbia-de-los-trapos.mp3'],
+      volume: 0.8,
+      html5: true,
+      onplay: function() {
+        startLyricsSync();
+        updateProgress();
+        if (playBtn) playBtn.style.display = 'none';
+        if (pauseBtn) pauseBtn.style.display = 'block';
+      },
+      onpause: function() {
+        clearIntervals();
+        if (playBtn) playBtn.style.display = 'block';
+        if (pauseBtn) pauseBtn.style.display = 'none';
+      },
+      onend: function() {
+        clearIntervals();
+        resetPlayer();
+        if (playBtn) playBtn.style.display = 'block';
+        if (pauseBtn) pauseBtn.style.display = 'none';
+      }
+    });
+  }
+
+  // Renderizar letras
+  function renderLyrics() {
+    if (!lyricsContainer) return;
+    
+    lyricsContainer.innerHTML = lyrics.map(l => 
+      `<div class="main__linea" data-time="${l.time}">${l.text}</div>`
+    ).join('');
+  }
+
+  // Sincronizar letras
+  function startLyricsSync() {
+    let currentActiveIndex = -1;
+    
+    lyricsInterval = setInterval(() => {
+      if (!sound || !sound.playing()) return;
+      
+      const currentTime = sound.seek();
+      const lines = document.querySelectorAll('.main__linea');
+      
+      let newActiveIndex = -1;
+      for (let i = 0; i < lyrics.length; i++) {
+        if (currentTime >= lyrics[i].time) {
+          newActiveIndex = i;
+        } else {
+          break;
+        }
+      }
+      
+      if (newActiveIndex !== currentActiveIndex) {
+        lines.forEach(line => line.classList.remove('activo'));
+        
+        if (newActiveIndex >= 0) {
+          lines[newActiveIndex].classList.add('activo');
+          lines[newActiveIndex].scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+          });
+        }
+        
+        currentActiveIndex = newActiveIndex;
+      }
+    }, 100);
+  }
+
+  // Actualizar barra de progreso
+  function updateProgress() {
+    progressInterval = setInterval(() => {
+      if (!sound || !progressBar) return;
+      
+      const progress = (sound.seek() / sound.duration()) * 100;
+      progressBar.style.width = progress + '%';
+    }, 200);
+  }
+
+  // Limpiar intervalos
+  function clearIntervals() {
+    if (lyricsInterval) clearInterval(lyricsInterval);
+    if (progressInterval) clearInterval(progressInterval);
+  }
+
+  // Resetear
+  function resetPlayer() {
+    if (progressBar) progressBar.style.width = '0%';
+    document.querySelectorAll('.main__linea').forEach(line => {
+      line.classList.remove('activo');
+    });
+  }
+
+  // Event listeners
+  if (playBtn && pauseBtn) {
+    // Configurar visibilidad inicial de botones
+    pauseBtn.style.display = 'none';
+    
+    playBtn.addEventListener('click', () => {
+      if (!sound) {
+        initPlayer();
+        renderLyrics();
+      }
+      if (sound) sound.play();
+    });
+    
+    pauseBtn.addEventListener('click', () => {
+      if (sound) sound.pause();
+    });
+  }
+
+  // Renderizar letras al cargar
+  renderLyrics();
+}
+</script>
+
+

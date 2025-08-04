@@ -1,0 +1,316 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Maxwidth from "../layouts/Maxwidth.astro";
+import Play from "../components/icons/Play.astro";
+import Pause from "../components/icons/Pause.astro";
+import Regresar from "../components/icons/Regresar.astro";
+---
+
+<Layout 
+  titulo="Cancionero - Yo soy así"
+  ocultarNav={true}
+  >
+  <main class="main">
+    <Maxwidth>
+      <div class="main__contenedor">
+        <div class="main__cancion">
+          <div class="main__atras">
+            <a href="/" class="main__icono">
+              <Regresar />
+            </a>
+          </div>
+          <div class="main__informacion">
+            <h5 class="main__nombre">Yo soy así</h5>
+            <h5 class="main__autor">La banda del rojo</h5>
+          </div>
+        </div>
+        <div class="main__contenedor-letra">
+          <div class="main__letra" id="letra-contenedor"></div>
+        </div>
+        <div class="main__reproduccion">
+          <div class="main__progreso">
+            <div class="main__barra" id="barra-progreso"></div>
+          </div>
+          <div class="main__botones">
+            <Play class="main__reproducir" id="reproducir"/>
+            <Pause class="main__pausa" id="pausar"/>
+          </div>
+        </div>
+      </div>
+    </Maxwidth>
+  </main>
+</Layout>
+
+<style>
+  .main {
+    width: 100%;
+    height: 100dvh;
+    min-height: 100dvh;
+    background-color: #d30d2b;
+  }
+
+  .max {
+    position: relative;
+  }
+
+  .main__contenedor {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .main__cancion {
+    width: 100%;
+    background-color: #d30d2b;
+    position: relative;
+    padding: 25px 0;
+    z-index: 888;
+  }
+
+  .main__atras {
+    position: absolute;
+    left: 0;
+  }
+
+  .main__icono {
+    color: #fff; 
+  }
+
+  .main__informacion {
+    text-align: center;
+  }
+
+  .main__nombre {
+    font-family: var(--fuente-titulos);
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+  }
+
+  .main__autor {
+    font-size: 1rem;
+    font-family: var(--fuente-textos-light);
+  }
+
+  .main__contenedor-letra {
+    width: 100%;
+    height: 100%;
+    padding: 0 1rem;
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    z-index: 444;
+  }
+
+  .main__letra {
+    padding: 20% 0;
+  }
+
+  .main__reproduccion {
+    background-color: #d30d2b;
+    padding: 15px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+    z-index: 888;
+  }
+
+  .main__progreso {
+    width: 100%;
+    max-width: 400px;
+    height: 5px;
+    background-color: #ffffff50;
+    border-radius: 15px;
+
+  }
+
+  .main__barra {
+    width: 0%;
+    height: 100%;
+    background-color: #fff;
+    border-radius: 15px;
+  }
+
+  .main__botones {
+    color: #000;
+    background-color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+  }
+
+
+  @media screen and (max-width: 760px) {
+    .main__letra {
+      padding: 40% 0;
+    }
+  }
+
+
+  @media screen and (max-width: 480px) {
+    .main__nombre {
+      font-size: 1rem;
+    }
+
+    .main__autor {
+      font-size: .9rem;
+    }
+    
+    .main__letra {
+      padding: 50% 0;
+    }
+  }
+  
+</style>
+
+<script is:inline>
+// Cargar Howler.js desde CDN
+if (typeof Howl === 'undefined') {
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js';
+  script.onload = initKaraoke;
+  document.head.appendChild(script);
+} else {
+  initKaraoke();
+}
+
+function initKaraoke() {
+  // Elementos del DOM
+  const playBtn = document.getElementById('reproducir');
+  const pauseBtn = document.getElementById('pausar');
+  const lyricsContainer = document.getElementById('letra-contenedor');
+  const progressBar = document.getElementById('barra-progreso');
+
+  // Letras sincronizadas
+  const lyrics = [
+    { time: 0.00, text: "La letra estará disponible próximamente" },
+  ];
+
+  // Variables
+  let sound = null;
+  let lyricsInterval = null;
+  let progressInterval = null;
+
+  // Inicializar el reproductor
+  function initPlayer() {
+    sound = new Howl({
+      src: ['/media/canciones/yo-soy-asi.mp3'],
+      volume: 0.8,
+      html5: true,
+      onplay: function() {
+        startLyricsSync();
+        updateProgress();
+        if (playBtn) playBtn.style.display = 'none';
+        if (pauseBtn) pauseBtn.style.display = 'block';
+      },
+      onpause: function() {
+        clearIntervals();
+        if (playBtn) playBtn.style.display = 'block';
+        if (pauseBtn) pauseBtn.style.display = 'none';
+      },
+      onend: function() {
+        clearIntervals();
+        resetPlayer();
+        if (playBtn) playBtn.style.display = 'block';
+        if (pauseBtn) pauseBtn.style.display = 'none';
+      }
+    });
+  }
+
+  // Renderizar letras
+  function renderLyrics() {
+    if (!lyricsContainer) return;
+    
+    lyricsContainer.innerHTML = lyrics.map(l => 
+      `<div class="main__linea" data-time="${l.time}">${l.text}</div>`
+    ).join('');
+  }
+
+  // Sincronizar letras
+  function startLyricsSync() {
+    let currentActiveIndex = -1;
+    
+    lyricsInterval = setInterval(() => {
+      if (!sound || !sound.playing()) return;
+      
+      const currentTime = sound.seek();
+      const lines = document.querySelectorAll('.main__linea');
+      
+      let newActiveIndex = -1;
+      for (let i = 0; i < lyrics.length; i++) {
+        if (currentTime >= lyrics[i].time) {
+          newActiveIndex = i;
+        } else {
+          break;
+        }
+      }
+      
+      if (newActiveIndex !== currentActiveIndex) {
+        lines.forEach(line => line.classList.remove('activo'));
+        
+        if (newActiveIndex >= 0) {
+          lines[newActiveIndex].classList.add('activo');
+          lines[newActiveIndex].scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+          });
+        }
+        
+        currentActiveIndex = newActiveIndex;
+      }
+    }, 100);
+  }
+
+  // Actualizar barra de progreso
+  function updateProgress() {
+    progressInterval = setInterval(() => {
+      if (!sound || !progressBar) return;
+      
+      const progress = (sound.seek() / sound.duration()) * 100;
+      progressBar.style.width = progress + '%';
+    }, 200);
+  }
+
+  // Limpiar intervalos
+  function clearIntervals() {
+    if (lyricsInterval) clearInterval(lyricsInterval);
+    if (progressInterval) clearInterval(progressInterval);
+  }
+
+  // Resetear
+  function resetPlayer() {
+    if (progressBar) progressBar.style.width = '0%';
+    document.querySelectorAll('.main__linea').forEach(line => {
+      line.classList.remove('activo');
+    });
+  }
+
+  // Event listeners
+  if (playBtn && pauseBtn) {
+    // Configurar visibilidad inicial de botones
+    pauseBtn.style.display = 'none';
+    
+    playBtn.addEventListener('click', () => {
+      if (!sound) {
+        initPlayer();
+        renderLyrics();
+      }
+      if (sound) sound.play();
+    });
+    
+    pauseBtn.addEventListener('click', () => {
+      if (sound) sound.pause();
+    });
+  }
+
+  // Renderizar letras al cargar
+  renderLyrics();
+}
+</script>
+
+

@@ -1,0 +1,62 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Maxwidth from '../layouts/Maxwidth.astro';
+import Cancion from  '../components/Cancion.astro';
+import Loader from '../components/Loader.astro';
+import datos from '../data/data.js';
+
+---
+
+<Layout titulo="Cancionero - Toluca FC">
+  <Loader />
+  <main class="main">
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        {
+            datos.map(dato => (
+              <div class="swiper-slide">
+                <Maxwidth>
+                  <Cancion
+                    fondo={dato.fondo}
+                    cd={dato.cd}
+                    titulo={dato.titulo}
+                    autor={dato.autor}
+                    enlace={dato.enlace}
+                    ilustrador={dato.ilustrador}
+                    instagram={dato.instagram}
+                  />
+                </Maxwidth>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+  </main>
+</Layout>
+
+<style>
+  .main {
+    width: 100%;
+    height: 100dvh;
+    min-height: 100dvh;
+    background-color: #000;
+  }
+
+  .swiper {
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<script>
+  import Swiper from 'swiper';
+  import { Navigation, Pagination } from 'swiper/modules';
+
+  import 'swiper/css';
+  import 'swiper/css/navigation';
+  import 'swiper/css/pagination';
+
+  const swiper = new Swiper('.swiper', {
+    modules: [Navigation, Pagination],
+  });
+</script>

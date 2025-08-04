@@ -1,0 +1,95 @@
+---
+import Navbar from "../components/Navbar.astro";
+
+const { titulo, ocultarNav = false } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{ titulo }</title> 
+	</head>
+	<body>
+    { !ocultarNav && <Navbar /> }
+		<slot />
+	</body>
+</html>
+
+<style is:global>
+  @font-face {
+    font-family: 'Druk';
+    src: url('/media/DrukWideBold.ttf');
+  }
+
+  @font-face {
+    font-family: 'Onest-light';
+    src: url('/media/Onest-Light.ttf');
+  }
+
+  @font-face {
+    font-family: 'Onest-Medium';
+    src: url('/media/Onest-Medium.ttf');
+  }
+
+  @font-face {
+    font-family: 'Onest-Bold';
+    src: url('/media/Onest-Bold.ttf');
+  }
+
+  :root {
+    /* Colores */
+    
+    /* FUENTES */
+    --fuente-titulos: 'Druk';
+    --fuente-textos-light: 'Onest-Light'; 
+    --fuente-textos-medium: 'Onest-Medium'; 
+    --fuente-textos-bold: 'Onest-Bold'; 
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+	html,
+	body {
+		margin: 0;
+		width: 100%;
+		height: 100%;
+    font-family: var(--fuente-textos-light);
+    color: #fff;
+	}
+
+  /* KARAOKE */
+  .main__linea {
+    margin: 15px 0;
+    transition: all 0.3s ease;
+    color: #fff;
+    font-family: var(--fuente-textos-bold);
+    font-size: 3.5rem;
+    opacity: .5;
+  }
+
+  .main__linea.activo {
+    opacity: 1;
+    color: #fff;
+  }
+
+
+  @media screen and (max-width: 760px) {
+    .main__linea {
+      font-size: 2.5rem;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .main__linea {
+      font-size: 1.7rem;
+    }
+  }
+</style>

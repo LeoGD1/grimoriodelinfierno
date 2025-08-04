@@ -1,0 +1,45 @@
+---
+
+---
+
+<div class="loader">
+  <img src="/media/logo.svg" class="loader__img" alt="grimorio del infierno">
+</div>
+
+<style>
+  .loader  {
+    width: 100%;
+    height: 100dvh;
+    background-color: #000;
+    clip-path: circle(140.9% at 0 0);
+    display: grid;
+    place-items: center;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 9999;
+    transition: all 1s ease-out;
+  }
+
+  .loader__img {
+    width: 150px;
+  }
+
+  .loader.loader__ocultar {
+    clip-path: circle(0.0% at 0 0);
+  }
+</style>
+
+<script is:inline>
+  const loader = document.querySelector('.loader');
+
+  function hideLoader() {
+    if(!loader) return;
+
+    window.addEventListener('load', () => {
+      loader.classList.add('loader__ocultar');
+    });
+  }
+
+  hideLoader();
+</script>

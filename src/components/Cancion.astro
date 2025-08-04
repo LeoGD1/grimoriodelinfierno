@@ -1,0 +1,201 @@
+---
+const { fondo, cd, titulo, autor, enlace, ilustrador, instagram } = Astro.props;
+---
+
+<div class="slide">
+  <div class="slide__fondo">
+    <img src={ fondo } class="slide__imagen">
+  </div>
+  <div class="slide__cancion">
+    <div class="slide__izquierda">
+      <img src={ cd } alt="disco vinilo" class="slide__disco">
+    </div>
+    <div class="slide__derecha">
+      <div class="slide__informacion">
+        <h1 class="slide__nombre">{ titulo }</h1>
+        <p class="slide__autor">{ autor }</p>
+        <button class="slide__button">
+          <div class="slide__efecto"></div>
+          <a href={ enlace } class="slide__enlace">Ver letra</a>
+        </button>
+        <p class="slide__diseñador">
+          Ilustracion realizada por: 
+          <a href={instagram} class="slide__ig" target="_blank">{ ilustrador }</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .slide {
+    width: 100%;
+    height:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .slide::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: #00000095;
+  }
+  
+  .slide__fondo {
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    z-index: -1;
+    overflow: hidden;
+  }
+
+  .slide__imagen {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .slide__cancion {
+    width: 100%;
+    height:  100%;
+    display: flex;
+  }
+
+  .slide__izquierda {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+
+  .slide__disco {
+    width: 75%;
+    animation: girar-disco 5s linear infinite;
+    will-change: transform;
+  }
+
+  .slide__derecha {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    display: grid;
+    place-items: center;
+    z-index: 888;
+  }
+
+  .slide__informacion {
+    max-width: 500px;
+  }
+
+  .slide__nombre {
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    font-family: var(--fuente-titulos);
+    margin-bottom: 15px;
+  }
+
+  .slide__autor {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+  }
+  
+  .slide__button {
+    width: 200px;
+    height: 40px;
+    position: relative;
+    background-color: transparent;
+    border: 2px solid #fff;
+    transform: skew(-20deg);
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    overflow: hidden;
+  }
+
+  .slide__enlace {
+    display: block;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    text-decoration: none;
+    color: #fff;
+  }
+
+  .slide__efecto {
+    height: 100%;
+    width: 120%;
+    background-color: #fff;
+    position: absolute;
+    left: -125%;
+    top: 0;
+    z-index: -1;
+    transition: left 200ms ease-in;
+  }
+
+  .slide__diseñador {
+    opacity: .9;
+    margin-top: 25px;
+  }
+
+  .slide__ig {
+    cursor: pointer;
+    color: #fff;
+  }
+
+  .slide__button:hover > .slide__efecto {
+    left: 0%;
+  }
+
+  .slide__button:hover > .slide__enlace {
+    color: #000;
+  }
+
+
+  @keyframes girar-disco {
+    from {
+      transform: rotate(0deg);
+    }
+    
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media screen and (max-width: 760px) {
+    .slide__cancion {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    .slide__izquierda {
+      height: auto;
+    }
+
+    .slide__disco {
+      width: 50%;
+    }
+    .slide__derecha {
+      height: auto;
+    }
+
+    .slide__nombre {
+      font-size: 1.9rem;
+    }
+  }
+
+
+  @media screen and (max-width: 480px) {
+    .slide__disco {
+      width: 70%;
+    }
+  }
+</style>
