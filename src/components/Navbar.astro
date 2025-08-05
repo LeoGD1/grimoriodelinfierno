@@ -1,11 +1,22 @@
 ---
-import Maxwidth from "../layouts/Maxwidth.astro"
+import Maxwidth from "../layouts/Maxwidth.astro";
+import Tiktok from "./icons/Tiktok.astro";
+import Instagram from "./icons/Instagram.astro";
 ---
 
 <nav class="nav">
   <Maxwidth>
     <div class="nav__logo">
       <img src="/media/logo.svg" alt="grimorio escarlata" class="nav__img"/>
+    </div>
+
+    <div class="nav__social">
+      <a href="https://www.tiktok.com/@grimoriodelinfierno?_t=ZS-8yc8dsFKlKj&_r=1" target="_blank" class="nav__icono">
+        <Tiktok />
+      </a>
+      <a href="https://www.instagram.com/grimorio_del_infierno?igsh=ZHNydHRyOGFtOW1l" target="_blank" class="nav__icono">
+        <Instagram />
+      </a>
     </div>
     <!-- <div class="nav__menu">
       <span class="nav__linea"></span>
@@ -54,4 +65,14 @@ import Maxwidth from "../layouts/Maxwidth.astro"
     background-color: #fff;
   }
   
+
+  .nav__social {
+    display: flex;
+    gap: 10px;
+  }
+
+  .nav__icono {
+    text-decoration: none;
+    color: #fff;
+  }
 </style>
